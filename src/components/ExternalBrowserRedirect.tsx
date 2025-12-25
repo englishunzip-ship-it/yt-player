@@ -46,8 +46,8 @@ const ExternalBrowserRedirect = () => {
   return (
     <div className="fixed inset-0 z-[100] bg-background/95 backdrop-blur-sm flex items-center justify-center p-4">
       <div className="bg-card border border-border rounded-2xl p-6 max-w-sm w-full text-center shadow-2xl">
-        <div className="w-16 h-16 bg-foreground/10 rounded-full flex items-center justify-center mx-auto mb-4">
-          <ExternalLink className="w-8 h-8 text-foreground" />
+        <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 overflow-hidden">
+          <img src="/logo.jpg" alt="HSCianTV" className="w-full h-full object-cover" />
         </div>
         
         <h2 className="text-xl font-bold text-foreground mb-2">
