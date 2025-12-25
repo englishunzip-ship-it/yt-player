@@ -20,36 +20,38 @@ const Sidebar = () => {
   ];
 
   return (
-    <aside className="hidden lg:flex flex-col w-52 fixed left-0 top-14 bottom-0 bg-sidebar border-r border-sidebar-border overflow-y-auto">
-      <div className="p-3 space-y-1">
-        {links.map((link) => (
-          <Link
-            key={link.label}
-            to={link.to}
-            className={`sidebar-link ${location.pathname === link.to ? 'sidebar-link-active' : ''}`}
-          >
-            <link.icon size={20} />
-            <span className="text-sm">{link.label}</span>
-          </Link>
-        ))}
-      </div>
+    <aside className="hidden lg:flex flex-col w-52 fixed left-0 top-14 bottom-0 bg-sidebar border-r border-sidebar-border">
+      <div className="flex-1 overflow-y-auto">
+        <div className="p-3 space-y-1">
+          {links.map((link) => (
+            <Link
+              key={link.label}
+              to={link.to}
+              className={`sidebar-link ${location.pathname === link.to ? 'sidebar-link-active' : ''}`}
+            >
+              <link.icon size={20} />
+              <span className="text-sm">{link.label}</span>
+            </Link>
+          ))}
+        </div>
 
-      <div className="border-t border-sidebar-border mx-3 my-2" />
+        <div className="border-t border-sidebar-border mx-3 my-2" />
 
-      <div className="p-3 space-y-1">
-        <p className="text-xs text-muted-foreground px-4 mb-2 font-medium">যোগাযোগ</p>
-        {socialLinks.map((link) => (
-          <a
-            key={link.label}
-            href={link.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="sidebar-link"
-          >
-            <link.icon size={20} className={link.color} />
-            <span className="text-sm">{link.label}</span>
-          </a>
-        ))}
+        <div className="p-3 space-y-1">
+          <p className="text-xs text-muted-foreground px-4 mb-2 font-medium">যোগাযোগ</p>
+          {socialLinks.map((link) => (
+            <a
+              key={link.label}
+              href={link.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="sidebar-link"
+            >
+              <link.icon size={20} className={link.color} />
+              <span className="text-sm">{link.label}</span>
+            </a>
+          ))}
+        </div>
       </div>
     </aside>
   );

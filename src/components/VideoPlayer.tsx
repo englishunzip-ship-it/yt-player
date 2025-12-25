@@ -5,12 +5,11 @@ import {
   Volume2,
   VolumeX,
   Maximize,
-  Minimize,
-  Undo2,
-  Redo2
+  Minimize
 } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { SeekBackward10, SeekForward10 } from '@/components/SeekIcons';
 
 interface VideoPlayerProps {
   embedUrl: string;
@@ -487,14 +486,12 @@ const VideoPlayer = ({ embedUrl, title }: VideoPlayerProps) => {
               {showCenterIcon === 'pause' && <Pause className="w-10 h-10 text-white" fill="white" />}
               {showCenterIcon === 'forward' && (
                 <div className="flex flex-col items-center">
-                  <Redo2 className="w-8 h-8 text-white" />
-                  <span className="text-white text-[10px] font-bold">10s</span>
+                  <SeekForward10 className="w-10 h-10 text-white" />
                 </div>
               )}
               {showCenterIcon === 'backward' && (
                 <div className="flex flex-col items-center">
-                  <Undo2 className="w-8 h-8 text-white" />
-                  <span className="text-white text-[10px] font-bold">10s</span>
+                  <SeekBackward10 className="w-10 h-10 text-white" />
                 </div>
               )}
             </div>
@@ -553,7 +550,7 @@ const VideoPlayer = ({ embedUrl, title }: VideoPlayerProps) => {
                 onClick={() => seekBackward(10)}
                 className="text-white active:scale-90 transition-transform"
               >
-                <Undo2 className="w-5 h-5" />
+                <SeekBackward10 className="w-6 h-6" />
               </button>
 
               <button
@@ -571,7 +568,7 @@ const VideoPlayer = ({ embedUrl, title }: VideoPlayerProps) => {
                 onClick={() => seekForward(10)}
                 className="text-white active:scale-90 transition-transform"
               >
-                <Redo2 className="w-5 h-5" />
+                <SeekForward10 className="w-6 h-6" />
               </button>
             </div>
 
@@ -635,14 +632,12 @@ const VideoPlayer = ({ embedUrl, title }: VideoPlayerProps) => {
             {showCenterIcon === 'pause' && <Pause className="w-10 h-10 text-white" fill="white" />}
             {showCenterIcon === 'forward' && (
               <div className="flex flex-col items-center">
-                <Redo2 className="w-8 h-8 text-white" />
-                <span className="text-white text-xs font-bold">10s</span>
+                <SeekForward10 className="w-10 h-10 text-white" />
               </div>
             )}
             {showCenterIcon === 'backward' && (
               <div className="flex flex-col items-center">
-                <Undo2 className="w-8 h-8 text-white" />
-                <span className="text-white text-xs font-bold">10s</span>
+                <SeekBackward10 className="w-10 h-10 text-white" />
               </div>
             )}
           </div>
@@ -705,10 +700,7 @@ const VideoPlayer = ({ embedUrl, title }: VideoPlayerProps) => {
               className="text-white hover:text-primary transition-colors p-1"
               title="10 সেকেন্ড পিছনে (J)"
             >
-              <div className="relative">
-                <Undo2 className="w-6 h-6" />
-                <span className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 text-[9px] font-bold">10</span>
-              </div>
+              <SeekBackward10 className="w-7 h-7" />
             </button>
 
             {/* Play/Pause */}
@@ -730,10 +722,7 @@ const VideoPlayer = ({ embedUrl, title }: VideoPlayerProps) => {
               className="text-white hover:text-primary transition-colors p-1"
               title="10 সেকেন্ড সামনে (L)"
             >
-              <div className="relative">
-                <Redo2 className="w-6 h-6" />
-                <span className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 text-[9px] font-bold">10</span>
-              </div>
+              <SeekForward10 className="w-7 h-7" />
             </button>
 
             {/* Volume */}
