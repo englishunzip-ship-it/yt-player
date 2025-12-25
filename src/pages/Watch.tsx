@@ -80,109 +80,98 @@ const Watch = () => {
     <div className="min-h-screen bg-background flex flex-col">
       <Navbar />
 
-      {/* Main content with responsive layout */}
-      <main className="flex-1 pt-14 flex flex-col lg:flex-row">
-        {/* Mobile: Fixed video section + scrollable recommended */}
-        <div className="flex flex-col lg:flex-1 lg:max-h-[calc(100vh-3.5rem)] lg:overflow-y-auto">
-          {/* Video Section - Fixed on mobile */}
-          <div className="flex-shrink-0 p-4 lg:flex-shrink">
-            <VideoPlayer embedUrl={currentVideo.embedUrl} title={currentVideo.title} />
+      {/* Main content with fixed video + scrollable recommended */}
+      <main className="flex-1 pt-14 flex flex-col lg:flex-row h-[calc(100vh-3.5rem)]">
+        {/* Video Section - Fixed (doesn't scroll) */}
+        <div className="flex-shrink-0 p-4 lg:flex-1 lg:max-w-[calc(100%-24rem)]">
+          <VideoPlayer embedUrl={currentVideo.embedUrl} title={currentVideo.title} />
+          
+          {/* Video Details */}
+          <div className="mt-4">
+            <h1 className="text-xl font-medium text-foreground">
+              {currentVideo.title}
+            </h1>
             
-            {/* Video Details */}
-            <div className="mt-4">
-              <h1 className="text-xl font-medium text-foreground">
-                {currentVideo.title}
-              </h1>
-              
-              {/* Mobile: Channel info + Controls in same row */}
-              <div className="flex items-center justify-between mt-2">
-                <p className="text-muted-foreground text-sm">
-                  HSCian • {currentVideo.views} views
-                </p>
+            {/* Mobile: Channel info + Controls in same row */}
+            <div className="flex items-center justify-between mt-2">
+              <p className="text-muted-foreground text-sm">
+                HSCian • {currentVideo.views} views
+              </p>
 
-                {/* Mobile Controls - Minimalist */}
-                <div className="flex items-center gap-1 lg:hidden">
-                  <button
-                    onClick={handlePrevious}
-                    disabled={currentIndex === 0}
-                    className="p-2 text-muted-foreground hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-                    aria-label="Previous"
-                  >
-                    <SkipBack size={18} />
-                  </button>
-
-                  <button
-                    onClick={handleNext}
-                    disabled={currentIndex === categoryVideos.length - 1}
-                    className="p-2 text-muted-foreground hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-                    aria-label="Next"
-                  >
-                    <SkipForward size={18} />
-                  </button>
-
-                  <button
-                    onClick={handleShare}
-                    className="p-2 text-muted-foreground hover:text-foreground transition-colors"
-                    aria-label="Share"
-                  >
-                    <Share2 size={18} />
-                  </button>
-
-                  <button
-                    onClick={handlePdfOpen}
-                    className="flex items-center gap-1 px-2 py-1.5 bg-primary/20 text-primary hover:bg-primary/30 transition-colors text-xs font-medium rounded-md"
-                    aria-label="PDF"
-                  >
-                    <FileText size={16} />
-                    <span>PDF</span>
-                  </button>
-                </div>
-              </div>
-
-              {/* Desktop Controls */}
-              <div className="hidden lg:flex items-center gap-3 mt-4">
+              {/* Mobile Controls - Minimalist */}
+              <div className="flex items-center gap-1 lg:hidden">
                 <button
                   onClick={handlePrevious}
                   disabled={currentIndex === 0}
-                  className="control-button disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="p-2 text-muted-foreground hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                  aria-label="Previous"
                 >
                   <SkipBack size={18} />
-                  <span>Previous</span>
                 </button>
 
                 <button
                   onClick={handleNext}
                   disabled={currentIndex === categoryVideos.length - 1}
-                  className="control-button disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="p-2 text-muted-foreground hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                  aria-label="Next"
                 >
-                  <span>Next</span>
                   <SkipForward size={18} />
                 </button>
 
-                <button onClick={handleShare} className="control-button">
+                <button
+                  onClick={handleShare}
+                  className="p-2 text-muted-foreground hover:text-foreground transition-colors"
+                  aria-label="Share"
+                >
                   <Share2 size={18} />
-                  <span>Share</span>
                 </button>
 
-                <button onClick={handlePdfOpen} className="control-button bg-primary/20 text-primary hover:bg-primary/30">
-                  <FileText size={18} />
+                <button
+                  onClick={handlePdfOpen}
+                  className="flex items-center gap-1 px-2 py-1.5 bg-primary/20 text-primary hover:bg-primary/30 transition-colors text-xs font-medium rounded-md"
+                  aria-label="PDF"
+                >
+                  <FileText size={16} />
                   <span>PDF</span>
                 </button>
               </div>
             </div>
-          </div>
 
-          {/* Mobile: Recommended Videos - Scrollable section */}
-          <div className="lg:hidden flex-1 overflow-y-auto border-t border-border py-4">
-            <RecommendedVideos
-              videos={categoryVideos}
-              currentVideoId={currentVideo.id}
-            />
+            {/* Desktop Controls */}
+            <div className="hidden lg:flex items-center gap-3 mt-4">
+              <button
+                onClick={handlePrevious}
+                disabled={currentIndex === 0}
+                className="control-button disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <SkipBack size={18} />
+                <span>Previous</span>
+              </button>
+
+              <button
+                onClick={handleNext}
+                disabled={currentIndex === categoryVideos.length - 1}
+                className="control-button disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <span>Next</span>
+                <SkipForward size={18} />
+              </button>
+
+              <button onClick={handleShare} className="control-button">
+                <Share2 size={18} />
+                <span>Share</span>
+              </button>
+
+              <button onClick={handlePdfOpen} className="control-button bg-primary/20 text-primary hover:bg-primary/30">
+                <FileText size={18} />
+                <span>PDF</span>
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Desktop: Recommended Videos sidebar */}
-        <div className="hidden lg:block lg:w-96 lg:border-l lg:border-border lg:h-[calc(100vh-3.5rem)] lg:overflow-y-auto py-4">
+        {/* Recommended Videos - Scrollable section (both mobile & desktop) */}
+        <div className="flex-1 overflow-y-auto border-t lg:border-t-0 lg:border-l border-border py-4 lg:w-96 lg:flex-none">
           <RecommendedVideos
             videos={categoryVideos}
             currentVideoId={currentVideo.id}

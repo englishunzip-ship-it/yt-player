@@ -31,8 +31,8 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
     } else {
       await navigator.clipboard.writeText(url);
       toast({
-        title: "লিংক কপি হয়েছে!",
-        description: "অ্যাপের লিংক ক্লিপবোর্ডে কপি করা হয়েছে।",
+        title: "Link copied!",
+        description: "App link has been copied to clipboard.",
       });
     }
     onClose();
@@ -65,7 +65,7 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
               <div className="flex items-center gap-3">
                 {theme === 'dark' ? <Moon size={20} /> : <Sun size={20} />}
                 <span className="text-sm font-medium">
-                  {theme === 'dark' ? 'ডার্ক মোড' : 'লাইট মোড'}
+                  {theme === 'dark' ? 'Dark Mode' : 'Light Mode'}
                 </span>
               </div>
               <Switch
@@ -114,7 +114,7 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
 
             {/* Social Links */}
             <div className="space-y-1">
-              <p className="text-xs text-muted-foreground px-4 mb-2 font-medium">যোগাযোগ</p>
+              <p className="text-xs text-muted-foreground px-4 mb-2 font-medium">Connect</p>
               {socialLinks.map((link) => (
                 <a
                   key={link.label}
@@ -134,14 +134,14 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
 
             {/* Share & Install App */}
             <div className="space-y-1">
-              <p className="text-xs text-muted-foreground px-4 mb-2 font-medium">অ্যাপ</p>
+              <p className="text-xs text-muted-foreground px-4 mb-2 font-medium">App</p>
               
               <button
                 onClick={handleShare}
                 className="sidebar-link w-full text-left"
               >
                 <Share2 size={20} className="text-primary" />
-                <span>অ্যাপ শেয়ার করুন</span>
+                <span>Share App</span>
               </button>
 
               <button
@@ -152,12 +152,12 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
                 {isInstalled ? (
                   <>
                     <Check size={20} className="text-green-500" />
-                    <span>অ্যাপ ইন্সটল হয়েছে</span>
+                    <span>App Installed</span>
                   </>
                 ) : (
                   <>
                     <Download size={20} className="text-primary" />
-                    <span>অ্যাপ ইন্সটল করুন</span>
+                    <span>Install App</span>
                   </>
                 )}
               </button>
