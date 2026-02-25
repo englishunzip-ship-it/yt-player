@@ -1,4 +1,4 @@
-import { Video } from '@/data/videos';
+import { Video } from '@/types';
 import VideoCard from './VideoCard';
 
 interface VideoGridProps {

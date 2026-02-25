@@ -1,22 +1,18 @@
 import { useState, useMemo, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Sidebar from '@/components/Sidebar';
-import CategorySlider from '@/components/CategorySlider';
 import VideoGrid from '@/components/VideoGrid';
-import { videos } from '@/data/videos';
+import { useAuth } from '@/contexts/AuthContext';
+import { useVideos } from '@/hooks/useFirestore';
 
 const Index = () => {
-  const [activeCategory, setActiveCategory] = useState('All');
+  const { appUser } = useAuth();
+  const courseId = appUser?.selectedCourseId || '';
+  const { videos, loading } = useVideos(courseId);
 
-  // Scroll to top when category changes
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [activeCategory]);
-
-  const filteredVideos = useMemo(() => {
-    if (activeCategory === 'All') return videos;
-    return videos.filter((video) => video.category === activeCategory);
-  }, [activeCategory]);
+  }, []);
 
   return (
     <div className="min-h-screen bg-background">
@@ -24,11 +20,17 @@ const Index = () => {
       <Sidebar />
 
       <main className="pt-14 lg:pl-52">
-        <CategorySlider
-          activeCategory={activeCategory}
-          onCategoryChange={setActiveCategory}
-        />
-        <VideoGrid videos={filteredVideos} />
+        {loading ? (
+          <div className="flex justify-center p-12">
+            <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full" />
+          </div>
+        ) : videos.length === 0 ? (
+          <div className="flex flex-col items-center justify-center p-12 text-center">
+            <p className="text-muted-foreground">এখনো কোনো ভিডিও যুক্ত করা হয়নি</p>
+          </div>
+        ) : (
+          <VideoGrid videos={videos} />
+        )}
       </main>
     </div>
   );

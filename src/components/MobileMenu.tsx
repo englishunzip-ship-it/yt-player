@@ -1,9 +1,11 @@
-import { BookOpen, FileText, Link as LinkIcon, Facebook, Youtube, MessageCircle, Send, Moon, Sun, Download, Share2 } from 'lucide-react';
+import { Moon, Sun, Download, Share2, LogOut, Shield, User } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Switch } from '@/components/ui/switch';
 import { useTheme } from '@/hooks/use-theme';
 import { usePwaInstall } from '@/hooks/use-pwa-install';
+import { useAuth } from '@/contexts/AuthContext';
+import { useSettings } from '@/hooks/useFirestore';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { toast } from '@/hooks/use-toast';
 
@@ -15,25 +17,16 @@ interface MobileMenuProps {
 const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
   const { theme, toggleTheme } = useTheme();
   const { isInstalled, installApp } = usePwaInstall();
+  const { appUser, logout } = useAuth();
+  const { settings } = useSettings();
 
   const handleShare = async () => {
     const url = window.location.origin;
     if (navigator.share) {
-      try {
-        await navigator.share({
-          title: 'HSCianTV',
-          text: 'HSC শিক্ষার্থীদের জন্য বিনামূল্যে ভিডিও লেসন',
-          url: url,
-        });
-      } catch (err) {
-        // User cancelled
-      }
+      try { await navigator.share({ title: 'HSCianTV', text: 'HSC শিক্ষার্থীদের জন্য ভিডিও লেসন', url }); } catch {}
     } else {
       await navigator.clipboard.writeText(url);
-      toast({
-        title: "লিংক কপি হয়েছে!",
-        description: "অ্যাপের লিংক ক্লিপবোর্ডে কপি করা হয়েছে।",
-      });
+      toast({ title: "লিংক কপি হয়েছে!" });
     }
     onClose();
   };
@@ -43,13 +36,10 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
     onClose();
   };
 
-  const socialLinks = [
-    { href: 'https://facebook.com/hsciantv', icon: Facebook, label: 'Facebook Page', color: 'text-blue-600' },
-    { href: 'https://facebook.com/groups/hsciantv', icon: Facebook, label: 'Facebook Group', color: 'text-blue-500' },
-    { href: 'https://youtube.com/@hsciantv', icon: Youtube, label: 'YouTube', color: 'text-red-500' },
-    { href: 'https://wa.me/+8801234567890', icon: MessageCircle, label: 'WhatsApp', color: 'text-green-500' },
-    { href: 'https://t.me/hsciantv', icon: Send, label: 'Telegram', color: 'text-blue-400' },
-  ];
+  const handleLogout = async () => {
+    await logout();
+    onClose();
+  };
 
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
@@ -60,126 +50,67 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
 
         <ScrollArea className="flex-1">
           <div className="p-4 space-y-4">
+            {/* User info */}
+            {appUser && (
+              <div className="p-3 rounded-lg bg-muted/50">
+                <div className="flex items-center gap-3">
+                  <User size={20} />
+                  <div>
+                    <p className="text-sm font-medium">{appUser.name}</p>
+                    <p className="text-xs text-muted-foreground">{appUser.email}</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Theme Toggle */}
             <div className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
               <div className="flex items-center gap-3">
                 {theme === 'dark' ? <Moon size={20} /> : <Sun size={20} />}
-                <span className="text-sm font-medium">
-                  {theme === 'dark' ? 'Dark mode' : 'Light mode'}
-                </span>
+                <span className="text-sm font-medium">{theme === 'dark' ? 'Dark mode' : 'Light mode'}</span>
               </div>
-              <Switch
-                checked={theme === 'dark'}
-                onCheckedChange={toggleTheme}
-              />
+              <Switch checked={theme === 'dark'} onCheckedChange={toggleTheme} />
             </div>
 
-            {/* Navigation Links */}
-            <div className="space-y-1">
-              <Link
-                to="/"
-                onClick={onClose}
-                className="sidebar-link"
-              >
-                <BookOpen size={20} />
-                <span>All Courses</span>
+            {/* Admin link */}
+            {appUser?.role === 'admin' && (
+              <Link to="/admin" onClick={onClose} className="sidebar-link">
+                <Shield size={20} className="text-primary" />
+                <span>Admin Panel</span>
               </Link>
-
-              <a
-                href="#"
-                className="sidebar-link"
-                onClick={(e) => {
-                  e.preventDefault();
-                  onClose();
-                }}
-              >
-                <FileText size={20} />
-                <span>Study Materials</span>
-              </a>
-
-              <a
-                href="#"
-                className="sidebar-link"
-                onClick={(e) => {
-                  e.preventDefault();
-                  onClose();
-                }}
-              >
-                <LinkIcon size={20} />
-                <span>PDF</span>
-              </a>
-            </div>
+            )}
 
             <div className="border-t border-border" />
 
-            {/* External Resources */}
-            <div className="space-y-1">
-              <p className="text-xs text-muted-foreground px-4 mb-2 font-medium">Resources</p>
-              <a
-                href="https://admission-calendar.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="sidebar-link"
-                onClick={onClose}
-              >
-                <BookOpen size={20} className="text-primary" />
-                <span>Admission Calendar</span>
-              </a>
-              <a
-                href="https://addresacademy.com/table-qna/?university=DU&year=2025"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="sidebar-link"
-                onClick={onClose}
-              >
-                <FileText size={20} className="text-primary" />
-                <span>Question Analysis</span>
-              </a>
-            </div>
+            {/* Social Links from settings */}
+            {settings?.socialLinks && settings.socialLinks.length > 0 && (
+              <>
+                <div className="space-y-1">
+                  <p className="text-xs text-muted-foreground px-4 mb-2 font-medium">Connect with us</p>
+                  {settings.socialLinks.map((link, i) => (
+                    <a key={i} href={link.url} target="_blank" rel="noopener noreferrer" className="sidebar-link" onClick={onClose}>
+                      <span className="text-sm">{link.label}</span>
+                    </a>
+                  ))}
+                </div>
+                <div className="border-t border-border" />
+              </>
+            )}
 
-            <div className="border-t border-border" />
-
-            {/* Social Links */}
-            <div className="space-y-1">
-              <p className="text-xs text-muted-foreground px-4 mb-2 font-medium">Connect with us</p>
-              {socialLinks.map((link) => (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="sidebar-link"
-                  onClick={onClose}
-                >
-                  <link.icon size={20} className={link.color} />
-                  <span>{link.label}</span>
-                </a>
-              ))}
-            </div>
-
-            <div className="border-t border-border" />
-
-            {/* Share & Install App */}
+            {/* Share & Install & Logout */}
             <div className="space-y-1">
               <p className="text-xs text-muted-foreground px-4 mb-2 font-medium">App</p>
-              
-              <button
-                onClick={handleShare}
-                className="sidebar-link w-full text-left"
-              >
-                <Share2 size={20} className="text-primary" />
-                <span>Share App</span>
+              <button onClick={handleShare} className="sidebar-link w-full text-left">
+                <Share2 size={20} className="text-primary" /><span>Share App</span>
               </button>
-
               {!isInstalled && (
-                <button
-                  onClick={handleInstall}
-                  className="sidebar-link w-full text-left hover:bg-accent transition-colors"
-                >
-                  <Download size={20} className="text-primary" />
-                  <span>Install App</span>
+                <button onClick={handleInstall} className="sidebar-link w-full text-left hover:bg-accent transition-colors">
+                  <Download size={20} className="text-primary" /><span>Install App</span>
                 </button>
               )}
+              <button onClick={handleLogout} className="sidebar-link w-full text-left text-destructive hover:bg-destructive/10">
+                <LogOut size={20} /><span>Logout</span>
+              </button>
             </div>
           </div>
         </ScrollArea>
