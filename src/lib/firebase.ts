@@ -5,12 +5,12 @@ import { getFirestore } from 'firebase/firestore';
 // ⚠️ আপনার Firebase প্রজেক্টের config এখানে বসান
 // Firebase Console > Project Settings > General > Your apps > Config
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyCPjq4947rnal0icObju1o-y1PGrfAUCTI",
+  authDomain: "hsciantv.firebaseapp.com",
+  projectId: "hsciantv",
+  storageBucket: "hsciantv.firebasestorage.app",
+  messagingSenderId: "615677953836",
+  appId: "1:615677953836:web:e69b936a255a71a34dce89"
 };
 
 const app = initializeApp(firebaseConfig);
